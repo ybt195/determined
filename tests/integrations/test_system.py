@@ -84,7 +84,7 @@ def test_metric_gathering() -> None:
         assert structure_equal(expected, actual)
 
 
-@pytest.mark.integ1  # type: ignore
+@pytest.mark.e2e_gpu  # type: ignore
 def test_gc_checkpoints_s3(secrets: Dict[str, str]) -> None:
     config = exp.s3_checkpoint_config(secrets)
     run_gc_checkpoints_test(config)
@@ -281,26 +281,6 @@ def test_create_test_mode() -> None:
         subprocess.check_call(command)
 
 
-@pytest.mark.integ1  # type: ignore
-def test_mnist_tf1_15() -> None:
-    pytest.skip("Ignore until we have official support for tf1.15.")
-    config = conf.load_config(conf.fixtures_path("mnist_tf/const.yaml"))
-
-    # TODO(brian + yoni) don't hardcode TF1.15 image when we build a TF1.15
-    # golden image.
-    config.setdefault("environment", {})
-    config["environment"]["image"] = (
-        "573932760021.dkr.ecr.us-west-2.amazonaws.com"
-        "/determinedai/task-environment:"
-        "c8750377f18ff0a738229adcf16a50685ef41631779616cdc86c0655fc554704"
-    )
-
-    # This particular configuration takes a long time to build, so wait longer than normal.
-    exp.run_basic_test_with_temp_config(
-        config, conf.official_examples_path("mnist_tf"), None, max_wait_secs=3000
-    )
-
-
 @pytest.mark.e2e_cpu  # type: ignore
 def test_labels() -> None:
     experiment_id = exp.create_experiment(
@@ -390,7 +370,7 @@ def test_log_null_bytes() -> None:
     assert len(logs) > 0
 
 
-@pytest.mark.integ1  # type: ignore
+@pytest.mark.e2e_gpu  # type: ignore
 def test_s3_no_creds(secrets: Dict[str, str]) -> None:
     config = conf.load_config(conf.official_examples_path("mnist_pytorch/const.yaml"))
     config["checkpoint_storage"] = exp.s3_checkpoint_config_no_creds()

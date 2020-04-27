@@ -607,6 +607,63 @@ jobs:
       - store_test_results:
           path: /tmp/test-results/
 
+  e2e-gpu-tests:
+    docker:
+      - image: python:3.6.9
+    steps:
+      - checkout
+      - setup-python-venv:
+          determined-common: true
+          determined-cli: true
+          determined: true
+          determined-deploy: true
+          extra-requirements-file: "tests/integrations/requirements.txt"
+          executor: python:3.6.9
+      - set-cluster-id:
+          cluster-id: e2e-gpu-$(git rev-parse --short HEAD)
+      - deploy-aws-cluster:
+          cluster-id: ${CLUSTER_ID}
+          det-version: ${CIRCLE_SHA1}
+      - set-master-address:
+          cluster-id: ${CLUSTER_ID}
+      - wait-for-master:
+          host: ${MASTER_HOST}
+      - run-e2e-tests:
+          mark: "e2e_gpu"
+          master-host: ${MASTER_HOST}
+      - store_test_results:
+          path: /tmp/test-results/
+
+
+  parallel-tests:
+    docker:
+      - image: python:3.6.9
+    steps:
+      - checkout
+      - setup-python-venv:
+          determined-common: true
+          determined-cli: true
+          determined: true
+          determined-deploy: true
+          extra-requirements-file: "tests/integrations/requirements.txt"
+          executor: python:3.6.9
+      - set-cluster-id:
+          cluster-id: parallel-$(git rev-parse --short HEAD)
+      - deploy-aws-cluster:
+          cluster-id: ${CLUSTER_ID}
+          det-version: ${CIRCLE_SHA1}
+          agent-instance-type: "p2.8xlarge"
+      - set-master-address:
+          cluster-id: ${CLUSTER_ID}
+      - wait-for-master:
+          host: ${MASTER_HOST}
+      - run-e2e-tests:
+          mark: "parallel"
+          master-host: ${MASTER_HOST}
+      - store_test_results:
+          path: /tmp/test-results/
+
+
 
 workflows:
   test-cli:
@@ -649,6 +706,25 @@ workflows:
                 - /pull\/.*/
           requires:
             - build-and-push-docker-images
+
+      - parallel-tests:
+          context: aws
+          filters:
+            branches:
+              ignore:
+                - /pull\/.*/
+          requires:
+            - build-and-push-docker-images
+
+      - e2e-gpu-tests:
+          context: aws
+          filters:
+            branches:
+              ignore:
+                - /pull\/.*/
+          requires:
+            - build-and-push-docker-images
+
 
   nightly:
     triggers:

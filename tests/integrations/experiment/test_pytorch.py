@@ -7,7 +7,7 @@ from tests.integrations import experiment as exp
 from tests.integrations.cluster_utils import skip_test_if_not_enough_gpus
 
 
-@pytest.mark.integ2  # type: ignore
+@pytest.mark.e2e_gpu  # type: ignore
 @pytest.mark.parametrize("aggregation_frequency", [1, 4])  # type: ignore
 def test_pytorch_11_const(aggregation_frequency: int) -> None:
     config = conf.load_config(conf.fixtures_path("mnist_pytorch/const-pytorch11.yaml"))
@@ -28,7 +28,7 @@ def test_pytorch_load() -> None:
     assert isinstance(nn, torch.nn.Module)
 
 
-@pytest.mark.integ2  # type: ignore
+@pytest.mark.e2e_gpu  # type: ignore
 def test_pytorch_const_multi_output() -> None:
     config = conf.load_config(conf.experimental_path("mnist_pytorch_multi_output/const.yaml"))
     config = conf.set_max_steps(config, 2)
@@ -107,7 +107,7 @@ def test_pytorch_const_parallel(aggregation_frequency: int, use_amp: bool) -> No
 
 
 @skip_test_if_not_enough_gpus(1)
-@pytest.mark.integ2  # type: ignore
+@pytest.mark.e2e_gpu  # type: ignore
 def test_pytorch_const_with_amp() -> None:
     config = conf.load_config(conf.official_examples_path("mnist_pytorch/const.yaml"))
     config = conf.set_max_steps(config, 2)
@@ -116,7 +116,7 @@ def test_pytorch_const_with_amp() -> None:
     exp.run_basic_test_with_temp_config(config, conf.official_examples_path("mnist_pytorch"), 1)
 
 
-@pytest.mark.integ1  # type: ignore
+@pytest.mark.e2e_gpu  # type: ignore
 def test_pytorch_cifar10_const() -> None:
     config = conf.load_config(conf.official_examples_path("cifar10_cnn_pytorch/const.yaml"))
     config = conf.set_max_steps(config, 2)

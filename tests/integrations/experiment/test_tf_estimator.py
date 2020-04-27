@@ -17,7 +17,7 @@ from tests.integrations.cluster_utils import skip_test_if_not_enough_gpus
 DATASET_EXPERIMENT_EXPECTED_LOSSES = [14, 4536, 50648544, 3364532256768]
 
 
-@pytest.mark.integ4  # type: ignore
+@pytest.mark.e2e_gpu  # type: ignore
 @pytest.mark.parametrize("tf2", [True, False])  # type: ignore
 def test_mnist_estimator_const(tf2: bool) -> None:
     config = conf.load_config(conf.fixtures_path("mnist_estimator/single.yaml"))
@@ -55,7 +55,7 @@ def test_mnist_estimator_const(tf2: bool) -> None:
             assert batch_metric["loss"] > 0
 
 
-@pytest.mark.integ4  # type: ignore
+@pytest.mark.e2e_gpu  # type: ignore
 def test_mnist_estimator_load() -> None:
     config = conf.load_config(conf.fixtures_path("mnist_estimator/single.yaml"))
     config = conf.set_tf1_image(config)
@@ -117,7 +117,7 @@ def test_mnist_estimator_warm_start(tf2: bool) -> None:
     assert trials[0].warm_start_checkpoint_id == first_checkpoint_id
 
 
-@pytest.mark.integ4  # type: ignore
+@pytest.mark.e2e_gpu  # type: ignore
 @pytest.mark.parametrize("tf2", [False])  # type: ignore
 def test_mnist_estimator_adaptive(tf2: bool) -> None:
     # Only test tf1 here, because a tf2 test would add no extra coverage.
@@ -158,7 +158,7 @@ def run_dataset_experiment(
     return exp.experiment_trials(experiment_id)
 
 
-@pytest.mark.integ4  # type: ignore
+@pytest.mark.e2e_gpu  # type: ignore
 @pytest.mark.parametrize("tf2", [False])  # type: ignore
 def test_dataset_restore(secrets: Dict[str, str], tf2: bool) -> None:
     for searcher_max_steps, batches_per_step in [(4, 1), (2, 2), (1, 4)]:
@@ -192,7 +192,7 @@ def test_mnist_estimator_data_layer_lfs(tf2: bool, storage_type: str) -> None:
     run_mnist_estimator_data_layer_test(tf2, storage_type)
 
 
-@pytest.mark.integ4  # type: ignore
+@pytest.mark.e2e_gpu  # type: ignore
 @pytest.mark.parametrize("tf2", [True, False])  # type: ignore
 @pytest.mark.parametrize("storage_type", ["s3"])  # type: ignore
 def test_mnist_estimator_data_layer_s3(tf2: bool, storage_type: str) -> None:
@@ -231,7 +231,7 @@ def test_mnist_estimator_data_layer_parallel(storage_type: str) -> None:
     )
 
 
-@pytest.mark.integ4  # type: ignore
+@pytest.mark.e2e_gpu  # type: ignore
 def test_mnist_estimator_adaptive_with_data_layer() -> None:
     config = conf.load_config(conf.fixtures_path("mnist_estimator/adaptive.yaml"))
     config = conf.set_tf2_image(config)

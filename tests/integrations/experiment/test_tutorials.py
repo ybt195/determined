@@ -5,7 +5,7 @@ from tests.integrations.cluster_utils import skip_test_if_not_enough_gpus
 from tests.integrations.experiment import create_native_experiment, experiment
 
 
-@pytest.mark.integ1  # type: ignore
+@pytest.mark.e2e_gpu  # type: ignore
 def test_tutorial() -> None:
     exp_id1 = create_native_experiment(
         conf.tutorials_path("native-tf-keras"), ["python", "tf_keras_native.py"]
