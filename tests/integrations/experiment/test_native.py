@@ -8,7 +8,6 @@ import typing
 
 import pytest
 
-from tests.integrations import cluster_utils
 from tests.integrations import config as conf
 from tests.integrations.experiment import create_native_experiment, experiment
 
@@ -20,7 +19,6 @@ NativeImplementation = collections.namedtuple(
         "configuration",
         "num_expected_steps_per_trial",
         "num_expected_trials",
-        "min_num_gpus_required",
     ],
 )
 
@@ -36,7 +34,6 @@ class NativeImplementations:
         },
         num_expected_steps_per_trial=1,
         num_expected_trials=1,
-        min_num_gpus_required=0,
     )
     TFEstimatorMNISTCNNSingle = NativeImplementation(
         cwd=conf.experimental_path("native_mnist_estimator"),
@@ -49,7 +46,6 @@ class NativeImplementations:
         },
         num_expected_steps_per_trial=1,
         num_expected_trials=1,
-        min_num_gpus_required=0,
     )
 
     TFEstimatorMNISTCNNSingleGeneric = NativeImplementation(
@@ -63,7 +59,6 @@ class NativeImplementations:
         },
         num_expected_steps_per_trial=1,
         num_expected_trials=1,
-        min_num_gpus_required=0,
     )
 
     # Train a single tf.keras model using fit().
@@ -82,27 +77,6 @@ class NativeImplementations:
         },
         num_expected_steps_per_trial=1,
         num_expected_trials=1,
-        min_num_gpus_required=0,
-    )
-
-    # Train a single tf.keras model using fit() on multiple GPUs.
-    TFKerasMNISTCNNSingleFitParallel = NativeImplementation(
-        cwd=conf.experimental_path("native_mnist_tf_keras"),
-        command=[
-            "python",
-            conf.experimental_path("native_mnist_tf_keras/native_impl.py"),
-            "--use-fit",
-        ],
-        configuration={
-            "batches_per_step": 4,
-            "checkpoint_storage": experiment.shared_fs_checkpoint_config(),
-            "searcher": {"name": "single", "max_steps": 1, "metric": "val_accuracy"},
-            "resources": {"slots_per_trial": 2},
-            "max_restarts": 2,
-        },
-        num_expected_steps_per_trial=1,
-        num_expected_trials=1,
-        min_num_gpus_required=2,
     )
 
     # Train a single tf.keras model using fit_generator().
@@ -117,7 +91,6 @@ class NativeImplementations:
         },
         num_expected_steps_per_trial=1,
         num_expected_trials=1,
-        min_num_gpus_required=0,
     )
 
     TFKerasMNISTCNNSingleGeneric = NativeImplementation(
@@ -131,7 +104,6 @@ class NativeImplementations:
         },
         num_expected_steps_per_trial=1,
         num_expected_trials=1,
-        min_num_gpus_required=0,
     )
 
 
@@ -164,8 +136,6 @@ def create_experiment(implementation: NativeImplementation) -> int:
 
 
 def run_warm_start_test(implementation: NativeImplementation) -> None:
-    cluster_utils.skip_if_not_enough_gpus(implementation.min_num_gpus_required)
-
     experiment_id1 = create_experiment(implementation)
     experiment.wait_for_experiment_state(
         experiment_id1, "COMPLETED", max_wait_secs=conf.DEFAULT_MAX_WAIT_SECS
@@ -203,7 +173,6 @@ def run_warm_start_test(implementation: NativeImplementation) -> None:
         NativeImplementations.TFKerasMNISTCNNSingleFitGenerator,
         NativeImplementations.TFKerasMNISTCNNSingleFit,
         NativeImplementations.TFKerasMNISTCNNSingleGeneric,
-        NativeImplementations.TFKerasMNISTCNNSingleFitParallel,
     ],
 )
 @pytest.mark.parametrize("tf2", [True, False])  # type: ignore

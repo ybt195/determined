@@ -2,10 +2,8 @@ import pytest
 
 from tests.integrations import config as conf
 from tests.integrations import experiment as exp
-from tests.integrations.cluster_utils import skip_test_if_not_enough_gpus
 
 
-@skip_test_if_not_enough_gpus(1)
 @pytest.mark.e2e_gpu  # type: ignore
 def test_tensorpack_const() -> None:
     config = conf.load_config(conf.official_examples_path("mnist_tp/const.yaml"))
@@ -17,7 +15,6 @@ def test_tensorpack_const() -> None:
     assert len(trials) == 1
 
 
-@skip_test_if_not_enough_gpus(8)
 @pytest.mark.parallel  # type: ignore
 def test_tensorpack_native_parallel() -> None:
     config = conf.load_config(conf.official_examples_path("mnist_tp/const.yaml"))
@@ -32,7 +29,6 @@ def test_tensorpack_native_parallel() -> None:
     assert len(trials) == 1
 
 
-@skip_test_if_not_enough_gpus(8)
 @pytest.mark.parallel  # type: ignore
 @pytest.mark.parametrize("aggregation_frequency", [1, 4])  # type: ignore
 def test_tensorpack_parallel(aggregation_frequency: int) -> None:

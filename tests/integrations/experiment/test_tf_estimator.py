@@ -8,7 +8,6 @@ from determined_common.api import gql
 from tests.integrations import cluster
 from tests.integrations import config as conf
 from tests.integrations import experiment as exp
-from tests.integrations.cluster_utils import skip_test_if_not_enough_gpus
 
 # The loss and gradient update for this model is deterministic and can
 # be computed by hand if you are patient enough. See
@@ -68,7 +67,6 @@ def test_mnist_estimator_load() -> None:
     assert isinstance(model, AutoTrackable)
 
 
-@skip_test_if_not_enough_gpus(8)
 @pytest.mark.parallel  # type: ignore
 @pytest.mark.parametrize("native_parallel", [True, False])  # type: ignore
 @pytest.mark.parametrize("tf2", [False, True])  # type: ignore
@@ -213,7 +211,6 @@ def run_mnist_estimator_data_layer_test(tf2: bool, storage_type: str) -> None:
     )
 
 
-@skip_test_if_not_enough_gpus(8)
 @pytest.mark.parallel  # type: ignore
 @pytest.mark.parametrize("storage_type", ["lfs", "s3"])  # type: ignore
 def test_mnist_estimator_data_layer_parallel(storage_type: str) -> None:

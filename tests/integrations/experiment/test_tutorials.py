@@ -1,7 +1,6 @@
 import pytest
 
 from tests.integrations import config as conf
-from tests.integrations.cluster_utils import skip_test_if_not_enough_gpus
 from tests.integrations.experiment import create_native_experiment, experiment
 
 
@@ -21,7 +20,6 @@ def test_tutorial() -> None:
     )
 
 
-@skip_test_if_not_enough_gpus(8)
 @pytest.mark.parallel  # type: ignore
 def test_tutorial_dtrain() -> None:
     create_native_experiment(

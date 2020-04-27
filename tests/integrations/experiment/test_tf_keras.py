@@ -3,10 +3,8 @@ import pytest
 from determined.experimental import Determined
 from tests.integrations import config as conf
 from tests.integrations import experiment as exp
-from tests.integrations.cluster_utils import skip_test_if_not_enough_gpus
 
 
-@skip_test_if_not_enough_gpus(8)
 @pytest.mark.parallel  # type: ignore
 @pytest.mark.parametrize("tf2", [False])  # type: ignore
 def test_tf_keras_native_parallel(tf2: bool) -> None:
@@ -23,7 +21,6 @@ def test_tf_keras_native_parallel(tf2: bool) -> None:
     assert len(trials) == 1
 
 
-@skip_test_if_not_enough_gpus(8)
 @pytest.mark.parallel  # type: ignore
 @pytest.mark.parametrize("aggregation_frequency", [1, 4])  # type: ignore
 @pytest.mark.parametrize("tf2", [False, True])  # type: ignore
@@ -103,7 +100,6 @@ def test_iris() -> None:
     model.summary()
 
 
-@skip_test_if_not_enough_gpus(8)
 @pytest.mark.parallel  # type: ignore
 def test_tf_keras_mnist_parallel() -> None:
     config = conf.load_config(conf.official_examples_path("fashion_mnist_tf_keras/const.yaml"))
@@ -146,7 +142,6 @@ def run_tf_keras_mnist_data_layer_test(tf2: bool, storage_type: str) -> None:
     )
 
 
-@skip_test_if_not_enough_gpus(8)
 @pytest.mark.parallel  # type: ignore
 @pytest.mark.parametrize("tf2", [False])  # type: ignore
 @pytest.mark.parametrize("storage_type", ["lfs", "s3"])  # type: ignore

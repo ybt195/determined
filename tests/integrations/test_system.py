@@ -13,7 +13,6 @@ import yaml
 from determined.experimental import Determined
 from tests.integrations import config as conf
 from tests.integrations import experiment as exp
-from tests.integrations.cluster_utils import skip_test_if_not_enough_gpus
 from tests.integrations.fixtures.metric_maker.metric_maker import (
     structure_equal,
     structure_to_metrics,
@@ -383,7 +382,6 @@ def test_s3_no_creds(secrets: Dict[str, str]) -> None:
     exp.run_basic_test_with_temp_config(config, conf.official_examples_path("mnist_pytorch"), 1)
 
 
-@skip_test_if_not_enough_gpus(8)
 @pytest.mark.parallel  # type: ignore
 def test_pytorch_parallel() -> None:
     config = conf.load_config(conf.official_examples_path("mnist_pytorch/const.yaml"))
