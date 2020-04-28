@@ -587,7 +587,7 @@ jobs:
           extra-requirements-file: "tests/integrations/requirements.txt"
           executor: python:3.6.9
       - set-cluster-id:
-          cluster-id: nightly-$(git rev-parse --short HEAD)
+          cluster-id: nightly-$(git rev-parse --short HEAD)-${CIRCLE_BUILD_NUM}
       - deploy-aws-cluster:
           cluster-id: ${CLUSTER_ID}
           det-version: ${CIRCLE_SHA1}
@@ -595,6 +595,7 @@ jobs:
           cluster-id: ${CLUSTER_ID}
       - wait-for-master:
           host: ${MASTER_HOST}
+      - run: sleep 20
       - run-e2e-tests:
           mark: "nightly"
           master-host: ${MASTER_HOST}
@@ -620,7 +621,7 @@ jobs:
           extra-requirements-file: "tests/integrations/requirements.txt"
           executor: python:3.6.9
       - set-cluster-id:
-          cluster-id: e2e-gpu-$(git rev-parse --short HEAD)
+          cluster-id: e2e-gpu-$(git rev-parse --short HEAD)-${CIRCLE_BUILD_NUM}
       - deploy-aws-cluster:
           cluster-id: ${CLUSTER_ID}
           det-version: ${CIRCLE_SHA1}
@@ -628,6 +629,7 @@ jobs:
           cluster-id: ${CLUSTER_ID}
       - wait-for-master:
           host: ${MASTER_HOST}
+      - run: sleep 20
       - run-e2e-tests:
           mark: "e2e_gpu"
           master-host: ${MASTER_HOST}
@@ -648,7 +650,7 @@ jobs:
           extra-requirements-file: "tests/integrations/requirements.txt"
           executor: python:3.6.9
       - set-cluster-id:
-          cluster-id: parallel-$(git rev-parse --short HEAD)
+          cluster-id: parallel-$(git rev-parse --short HEAD)-${CIRCLE_BUILD_NUM}
       - deploy-aws-cluster:
           cluster-id: ${CLUSTER_ID}
           det-version: ${CIRCLE_SHA1}
@@ -657,6 +659,7 @@ jobs:
           cluster-id: ${CLUSTER_ID}
       - wait-for-master:
           host: ${MASTER_HOST}
+      - run: sleep 20
       - run-e2e-tests:
           mark: "parallel"
           master-host: ${MASTER_HOST}
