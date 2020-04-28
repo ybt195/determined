@@ -23,7 +23,7 @@ def test_pytorch_load() -> None:
         config, conf.official_examples_path("mnist_pytorch"), 1
     )
 
-    nn = Determined().get_experiment(experiment_id).top_checkpoint().load()
+    nn = Determined(conf.make_master_url()).get_experiment(experiment_id).top_checkpoint().load()
     assert isinstance(nn, torch.nn.Module)
 
 
@@ -121,7 +121,7 @@ def test_pytorch_cifar10_const() -> None:
         config, conf.official_examples_path("cifar10_cnn_pytorch"), 1
     )
     trials = exp.experiment_trials(experiment_id)
-    nn = Determined().get_trial(trials[0].id).select_checkpoint(latest=True).load()
+    nn = Determined(conf.make_master_url()).get_trial(trials[0].id).select_checkpoint(latest=True).load()
     assert isinstance(nn, torch.nn.Module)
 
 
@@ -135,5 +135,5 @@ def test_pytorch_cifar10_parallel() -> None:
         config, conf.official_examples_path("cifar10_cnn_pytorch"), 1
     )
     trials = exp.experiment_trials(experiment_id)
-    nn = Determined().get_trial(trials[0].id).select_checkpoint(latest=True).load()
+    nn = Determined(conf.make_master_url()).get_trial(trials[0].id).select_checkpoint(latest=True).load()
     assert isinstance(nn, torch.nn.Module)
