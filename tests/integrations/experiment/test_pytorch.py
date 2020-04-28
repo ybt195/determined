@@ -114,6 +114,7 @@ def test_pytorch_const_with_amp() -> None:
 
 @pytest.mark.e2e_gpu  # type: ignore
 def test_pytorch_cifar10_const() -> None:
+    pytest.skip("Disable until we can load a checkpoint onto CPU.")
     config = conf.load_config(conf.official_examples_path("cifar10_cnn_pytorch/const.yaml"))
     config = conf.set_max_steps(config, 2)
 
@@ -127,6 +128,7 @@ def test_pytorch_cifar10_const() -> None:
 
 @pytest.mark.parallel  # type: ignore
 def test_pytorch_cifar10_parallel() -> None:
+    pytest.skip("Disable until we can load a checkpoint onto CPU.")
     config = conf.load_config(conf.official_examples_path("cifar10_cnn_pytorch/const.yaml"))
     config = conf.set_max_steps(config, 2)
     config = conf.set_slots_per_trial(config, 8)
