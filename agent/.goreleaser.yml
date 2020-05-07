@@ -36,7 +36,7 @@ nfpms:
 
 release:
   github:
-    owner: determined-ai
+    owner: ybt195
     name: determined
 
 dockers:
