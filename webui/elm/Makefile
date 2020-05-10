@@ -4,23 +4,23 @@ get-deps:
 		npm ci --no-audit && break ; \
 	done
 
-public/style.css: styles-in.css tailwind.config.js
-	npm run build-css -- -o public/styles.css
+build/style.css: styles-in.css tailwind.config.js
+	npm run build-css -- -o build/styles.css
 
 .PHONY: build
-build: public/style.css
-	npm run build-elm -- --output=public/determined-ui.js
+build: build/style.css
+	npm run build-elm -- --output=build/determined-ui.js
+	cp -r public/* build/
 
 .PHONY: clean
 clean:
 	rm -f npm-debug.log
-	rm -f public/style.css
-	rm -f public/determined-ui.js
+	rm -f build/
 	rm -rf elm-stuff/ tests/elm-stuff/ node_modules/
 
 .PHONY: live
 live:
-	npm run live-workaround -- --output=public/determined-ui.js
+	npm run live-workaround -- --output=build/determined-ui.js
 
 .PHONY: fmt
 fmt:

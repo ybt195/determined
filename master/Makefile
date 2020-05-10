@@ -40,11 +40,11 @@ test:
 pre-package:
 	rm -rf build
 	mkdir -p build/webui/docs
-	mkdir -p build/webui/elm
+	mkdir -p build/webui/elm/public
 	mkdir -p build/webui/react
 	mkdir -p build/wheels/
 	cp -r ../docs/site/html/* build/webui/docs
-	cp -r ../webui/elm/public build/webui/elm
+	cp -r ../webui/elm/build/* build/webui/elm/public
 	cp -r ../webui/react/build/* build/webui/react
 	cp ../common/dist/*.whl build/wheels/
 	cp ../cli/dist/*.whl build/wheels/

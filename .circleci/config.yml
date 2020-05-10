@@ -598,7 +598,7 @@ jobs:
       - persist_to_workspace:
           root: .
           paths:
-            - webui/elm/public
+            - webui/elm/build
 
   test-unit-elm:
     docker:
